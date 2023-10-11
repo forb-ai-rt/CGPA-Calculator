@@ -10,22 +10,65 @@ grade_to_point = {
 }
 grades = list(grade_to_point.keys())
 
-def calculate_cgpa(course_data):
+def calculate_cgpa(grades, course_credits):
     total_credit_points = 0
     total_credits = 0
 
-    for course in course_data:
-        credit_points = grade_to_point.get(course["grade"], 0)
-        credits = course["credit"]
-        if credit_points > 0:
-            total_credit_points += credit_points * credits
-            total_credits += credits
+    for course, grade in grades.items():
+        credit_points = get_credit_points(grade)
+        credits = course_credits.get(course, 0)
+
+        total_credit_points += credit_points * credits
+        total_credits += credits
 
     if total_credits == 0:
         return 0
 
     cgpa = total_credit_points / total_credits
     return cgpa
+
+def get_credit_points(grade):
+    # Define your grade to credit point mapping here
+    # For example:
+    grade_points = {
+        'A+': 4.0,
+        'A': 4.0,
+        'A-': 3.7,
+        'B+': 3.3,
+        'B': 3.0,
+        'B-': 2.7,
+        'C+': 2.3,
+        'C': 2.0,
+        'C-': 1.7,
+        'D+': 1.3,
+        'D': 1.0,
+        'F': 0.0,
+    }
+
+    return grade_points.get(grade, 0.0)
+
+def main():
+    # Course grades as a dictionary
+    grades = {
+        'Math': 'A',
+        'Science': 'B+',
+        'History': 'A-',
+        # Add more courses and grades here
+    }
+
+    # Course credits as a dictionary
+    course_credits = {
+        'Math': 4,
+        'Science': 3,
+        'History': 3,
+        # Add more courses and credits here
+    }
+
+    cgpa = calculate_cgpa(grades, course_credits)
+    print(f"Your CGPA is: {cgpa:.2f}")
+
+if __name__ == "__main__":
+    main()
 
 def maximum_cgpa(course_data):
     total_credit_points = 0
